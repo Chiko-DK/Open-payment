@@ -1,3 +1,5 @@
+//  this file is  lander/page.tsx
+
 import Image from "next/image";
 import Nav from "@/components/navigation";
 import loanOffers from "../data/lender.json";

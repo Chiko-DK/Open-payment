@@ -1,50 +1,8 @@
 [
   {
-    "name": "Sibongile Ndlovu",
-    "pointer": "sibongile.lown.africa",
-    "amount": "R 200.00",
-    "status": "ACTIVE"
-  },
-  {
-    "name": "Thabo Maseko",
-    "pointer": "thabo.lown.africa",
-    "amount": "R 100.00",
-    "status": "COMPLETED"
-  },
-  {
-    "name": "Lerato Nkosi",
-    "pointer": "lerato.lown.africa",
-    "amount": "R 350.00",
-    "status": "ACTIVE"
-  },
-  {
-    "name": "Sipho Dlamini",
-    "pointer": "sipho.lown.africa",
-    "amount": "R 50.00",
-    "status": "COMPLETED"
-  },
-  {
-    "name": "Noxolo Khumalo",
-    "pointer": "noxolo.lown.africa",
-    "amount": "R 150.00",
-    "status": "ACTIVE"
-  },
-  {
-    "name": "Zola Zulu",
-    "pointer": "zola.lown.africa",
-    "amount": "R 75.00",
-    "status": "ACTIVE"
-  },
-  {
-    "name": "Current User",
-    "pointer": "user.lown.africa",
-    "amount": "R 50,000",
-    "status": "PENDING"
-  },
-  {
-    "name": "Current User",
-    "pointer": "user.lown.africa",
-    "amount": "R 35,000",
+    "name": "chiko Kasongo",
+    "pointer": "chiko.lown.africa",
+    "amount": "R 50,000.00",
     "status": "PENDING"
   }
 ]

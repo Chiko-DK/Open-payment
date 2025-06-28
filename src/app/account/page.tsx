@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Nav from "@/components/navigation";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -25,9 +25,32 @@ export default function Account() {
   const [user, setUser] = useState(initialUser);
   const router = useRouter();
 
+  // Load role from localStorage on component mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedRole = localStorage.getItem('userRole') as 'lender' | 'borrower';
+      if (savedRole) {
+        setUser(prev => ({ ...prev, role: savedRole }));
+      }
+    }
+  }, []);
+
   const toggleRole = () => {
     const newRole = user.role === 'lender' ? 'borrower' : 'lender';
-    setUser({ ...user, role: newRole });
+    const updatedUser = { ...user, role: newRole };
+    
+    setUser(updatedUser);
+    
+    // Save to localStorage for persistence
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('userRole', newRole);
+      
+      // Dispatch custom event to notify navigation component
+      window.dispatchEvent(new CustomEvent('roleChanged', { 
+        detail: { role: newRole } 
+      }));
+    }
+    
     alert(`Switched to ${newRole.toUpperCase()} mode`);
 
     // Redirect if on wrong page after switching

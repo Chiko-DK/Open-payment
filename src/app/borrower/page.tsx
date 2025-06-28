@@ -3,52 +3,92 @@
 
 import Nav from "@/components/navigation";
 import loanOffers from "../data/borrower.json";
+import userData from "../data/user"; // now importing from user.ts
+import { useState, useEffect } from "react";
+
+// Define the user type based on the TypeScript object structure
+type UserData = {
+  user: {
+    name: string;
+    email: string;
+    phone: string;
+    joined_date: string;
+    location: string;
+  };
+  financial_summary: {
+    credit_score: number;
+    reliability_rating: string;
+    loans_completed: number;
+    active_loans: number;
+    missed_repayments: number;
+    wallet_balance: string;
+  };
+};
 
 export default function Borrower() {
-  const applyForLoan = async (offer: any) => {
-  const contract = {
-    name: "Current User", // Ideally fetched from session or user state
-    pointer: "user.lown.africa",
-    amount: `R ${offer.amount.value.toLocaleString()}`,
-    status: "PENDING",
+  const [user, setUser] = useState<UserData | null>(null);
+
+  // Load user data directly from the TypeScript file
+  useEffect(() => {
+    setUser(userData);
+  }, []);
+
+  // Generate pointer from email (remove @ and everything after, add .lown.africa)
+  const generatePointer = (email: string): string => {
+    const username = email.split('@')[0];
+    return `${username}.lown.africa`;
   };
 
-  try {
-    const res = await fetch('/api/contracts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(contract),
-    });
+  const applyForLoan = async (offer: any) => {
+    if (!user) return;
 
-    if (res.ok) {
-      alert('Loan application submitted!');
-    } else {
-      alert('Failed to submit loan.');
+    const contract = {
+      name: user.user.name,
+      pointer: generatePointer(user.user.email),
+      amount: `R ${offer.amount.value.toLocaleString()}.00`,
+      status: "PENDING",
+    };
+
+    console.log('Applying for loan with data:', contract);
+
+    try {
+      const res = await fetch('/api/contracts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(contract),
+      });
+
+      if (res.ok) {
+        alert(`Loan application submitted successfully!\n\nDetails:\nName: ${contract.name}\nPointer: ${contract.pointer}\nAmount: ${contract.amount}\nStatus: ${contract.status}`);
+      } else {
+        alert('Failed to submit loan application.');
+      }
+    } catch (err) {
+      console.error('Error applying for loan:', err);
+      alert('Error occurred while applying for loan.');
     }
-  } catch (err) {
-    console.error(err);
-    alert('Error occurred while applying.');
-  }
-};
+  };
+
+  if (!user) return <div className="text-white p-6">Loading...</div>;
 
   return (
     <div className="min-h-screen bg-slate-900 text-white flex">
-      {/* Sidebar Navigation */}
       <Nav />
 
-      {/* Main Content */}
       <main className="flex-1 p-6">
         <div className="mb-6">
           <h1 className="text-3xl font-bold mb-2">Borrower Dashboard</h1>
           <p className="text-slate-400">Find the perfect loan and manage your borrowing activities</p>
+
+          <div className="mt-4 p-4 bg-slate-800 rounded-lg">
+            <div className="text-sm text-slate-400">Logged in as:</div>
+            <div className="font-semibold">{user.user.name}</div>
+            <div className="text-sm text-slate-400">Pointer: {generatePointer(user.user.email)}</div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-          {/* Main Content Area */}
           <div className="lg:col-span-2 space-y-6">
-
-            {/* Current Loans Overview */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-slate-800 rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-3">
@@ -60,7 +100,7 @@ export default function Borrower() {
                     <div className="text-sm text-slate-400">Total Borrowed</div>
                   </div>
                 </div>
-                <div className="text-blue-500 text-sm">0 active loans</div>
+                <div className="text-blue-500 text-sm">{user.financial_summary.active_loans} active loans</div>
               </div>
 
               <div className="bg-slate-800 rounded-xl p-6">
@@ -82,7 +122,7 @@ export default function Borrower() {
                     <span className="text-2xl">📊</span>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold">320</div>
+                    <div className="text-2xl font-bold">{user.financial_summary.credit_score}</div>
                     <div className="text-sm text-slate-400">Credit Score</div>
                   </div>
                 </div>
@@ -90,7 +130,6 @@ export default function Borrower() {
               </div>
             </div>
 
-            {/* Loan Application Form */}
             <div className="bg-slate-800 rounded-xl p-6">
               <h2 className="text-xl font-semibold mb-4">Apply for a New Loan</h2>
 
@@ -107,7 +146,7 @@ export default function Borrower() {
                 <div>
                   <label className="block text-sm text-slate-400 mb-2">Loan Purpose</label>
                   <select className="w-full bg-slate-700 border border-slate-600 rounded-lg p-3 text-white focus:border-blue-500 focus:outline-none">
-                    <option>Daily Neccesseties</option>
+                    <option>Daily Necessities</option>
                     <option>Rent</option>
                     <option>School Fees</option>
                     <option>Transport Expenses</option>
@@ -133,7 +172,6 @@ export default function Borrower() {
               </button>
             </div>
 
-            {/* Available Loan Offers */}
             <div className="bg-slate-800 rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold">Available Loan Offers</h2>
@@ -151,15 +189,15 @@ export default function Borrower() {
                         <span className="text-lg font-semibold">{offer.apr}% APR</span>
                       </div>
                       <button
-                      onClick={() => applyForLoan(offer)}
-                      className={`${
-                        index === 0
-                          ? 'bg-green-500 hover:bg-green-600 text-black'
-                          : 'bg-blue-500 hover:bg-blue-600 text-white'
-                      } px-4 py-2 rounded-lg font-medium transition-colors`}
-                    >
-                      Apply Now
-                    </button>
+                        onClick={() => applyForLoan(offer)}
+                        className={`${
+                          index === 0
+                            ? 'bg-green-500 hover:bg-green-600 text-black'
+                            : 'bg-blue-500 hover:bg-blue-600 text-white'
+                        } px-4 py-2 rounded-lg font-medium transition-colors`}
+                      >
+                        Apply Now
+                      </button>
                     </div>
                     <div className="grid grid-cols-3 gap-4 text-sm">
                       <div>
@@ -170,7 +208,10 @@ export default function Borrower() {
                         <div className="text-slate-400">Term</div>
                         <div className="font-medium">{offer.term} months</div>
                       </div>
-                      
+                      <div>
+                        <div className="text-slate-400">Applicant</div>
+                        <div className="font-medium">{user.user.name}</div>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -178,7 +219,6 @@ export default function Borrower() {
             </div>
           </div>
 
-          {/* Sidebar Summary / Notifications */}
           <div className="space-y-6">
             <div className="bg-slate-800 rounded-xl p-6">
               <h2 className="text-xl font-semibold mb-4">Notifications</h2>
@@ -207,7 +247,6 @@ export default function Borrower() {
               </ul>
             </div>
           </div>
-
         </div>
       </main>
     </div>
