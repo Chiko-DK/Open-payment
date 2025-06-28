@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import Nav from '@/components/navigation';
+import { useState, useEffect } from "react";
+import Nav from "@/components/navigation";
 
 type Contract = {
   id: string;
@@ -20,25 +20,74 @@ export default function Contracts() {
   const [selectedContract, setSelectedContract] = useState<Contract | null>(null);
 
   useEffect(() => {
-    import('../data/contracts.json').then((data) => {
+    import("../data/contracts.json").then((data) => {
       // Enrich the imported JSON data with default details
       const enriched = data.default.map((c: any, index: number) => ({
         id: `c${index + 1}`,
         borrower: c.name,
         pointer: c.pointer,
         amount: c.amount,
-        status: c.status,
-        interestRate: index === 0 ? '8%' : '5%',
-        duration: index === 0 ? '4 weeks' : '2 weeks',
-        startDate: index === 0 ? 'Jun 1, 2025' : 'May 20, 2025',
+        status: c.status.toLowerCase(),
+        interestRate: index === 0 ? "8%" : "5%",
+        duration: index === 0 ? "4 weeks" : "2 weeks",
+        startDate: index === 0 ? "Jun 1, 2025" : "May 20, 2025",
         repaymentSchedule:
           index === 0
-            ? ['R 54.00 - Jun 8', 'R 54.00 - Jun 15', 'R 54.00 - Jun 22', 'R 54.00 - Jun 29']
-            : ['R 52.50 - May 27', 'R 52.50 - Jun 3'],
+            ? ["R 54.00 - Jun 8", "R 54.00 - Jun 15", "R 54.00 - Jun 22", "R 54.00 - Jun 29"]
+            : ["R 52.50 - May 27", "R 52.50 - Jun 3"],
       }));
       setContracts(enriched);
     });
   }, []);
+
+  // Handler for accept or decline contract
+  const handleContractAction = async (action: "accept" | "decline") => {
+  if (!selectedContract) return;
+
+  // If action is "accept", send request to payment API
+  if (action === "accept") {
+    try {
+      const response = await fetch("http://localhost:3001/api/process-outgoing-payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contractId: selectedContract.id,
+          amount: selectedContract.amount,
+          borrower: selectedContract.borrower,
+          pointer: selectedContract.pointer,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to process payment: ${response.statusText}`);
+      }
+
+      console.log("Payment processed successfully");
+    } catch (error) {
+      console.error("Payment API error:", error);
+      alert("Failed to process payment. Please try again.");
+      return;
+    }
+  }
+
+  // Update contract status locally
+  const updatedContracts = contracts.map((contract) =>
+    contract.id === selectedContract.id
+      ? {
+          ...contract,
+          status: action === "accept" ? "accepted" : "declined",
+        }
+      : contract
+  );
+  setContracts(updatedContracts);
+
+  setSelectedContract({
+    ...selectedContract,
+    status: action === "accept" ? "accepted" : "declined",
+  });
+};
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 flex">
@@ -60,7 +109,7 @@ export default function Contracts() {
                   <div className="text-sm text-gray-500">{contract.pointer}</div>
                 </div>
                 <div className="text-sm text-gray-600">{contract.amount}</div>
-                <div className="text-sm text-indigo-600 font-semibold">{contract.status}</div>
+                <div className="text-sm text-indigo-600 font-semibold capitalize">{contract.status}</div>
               </div>
             ))}
           </div>
@@ -76,42 +125,48 @@ export default function Contracts() {
             <h3 className="text-xl font-bold mb-2">
               Contract with {selectedContract.borrower}
             </h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Pointer: {selectedContract.pointer}
-            </p>
+            <p className="text-sm text-gray-600 mb-4">Pointer: {selectedContract.pointer}</p>
 
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div className="bg-gray-100 p-4 rounded">
                 <div className="text-gray-500">Loan Amount</div>
-                <div className="font-semibold text-gray-800">
-                  {selectedContract.amount}
-                </div>
+                <div className="font-semibold text-gray-800">{selectedContract.amount}</div>
               </div>
               <div className="bg-gray-100 p-4 rounded">
                 <div className="text-gray-500">Interest Rate</div>
-                <div className="font-semibold text-gray-800">
-                  {selectedContract.interestRate}
-                </div>
+                <div className="font-semibold text-gray-800">{selectedContract.interestRate}</div>
               </div>
               <div className="bg-gray-100 p-4 rounded">
                 <div className="text-gray-500">Duration</div>
-                <div className="font-semibold text-gray-800">
-                  {selectedContract.duration}
-                </div>
+                <div className="font-semibold text-gray-800">{selectedContract.duration}</div>
               </div>
               <div className="bg-gray-100 p-4 rounded">
                 <div className="text-gray-500">Start Date</div>
-                <div className="font-semibold text-gray-800">
-                  {selectedContract.startDate}
-                </div>
+                <div className="font-semibold text-gray-800">{selectedContract.startDate}</div>
               </div>
               <div className="bg-gray-100 p-4 rounded">
                 <div className="text-gray-500">Status</div>
-                <div className="font-semibold text-indigo-600">
-                  {selectedContract.status}
-                </div>
+                <div className="font-semibold text-indigo-600 capitalize">{selectedContract.status}</div>
               </div>
             </div>
+
+            {/* Accept / Decline buttons only if status is 'pending' */}
+            {selectedContract.status === "pending" && (
+              <div className="mt-6 flex space-x-4">
+                <button
+                  onClick={() => handleContractAction("accept")}
+                  className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                >
+                  Accept Contract
+                </button>
+                <button
+                  onClick={() => handleContractAction("decline")}
+                  className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+                >
+                  Decline Contract
+                </button>
+              </div>
+            )}
 
             <div className="mt-6">
               <h4 className="font-bold mb-2">Repayment Schedule</h4>
