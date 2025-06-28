@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "dotColor": "green",
+    "loanAmount": 25000,
+    "interestRate": 7.5,
+    "termMonths": 36,
+    "creditScoreRequired": 700,
+    "applications": 3,
+    "postedDaysAgo": 2
+  },
+  {
+    "id": 2,
+    "dotColor": "yellow",
+    "loanAmount": 15000,
+    "interestRate": 9.2,
+    "termMonths": 24,
+    "creditScoreRequired": 650,
+    "applications": 1,
+    "postedDaysAgo": 5
+  },
+  {
+    "id": 3,
+    "dotColor": "blue",
+    "loanAmount": 50000,
+    "interestRate": 6.8,
+    "termMonths": 60,
+    "creditScoreRequired": 750,
+    "applications": 7,
+    "postedDaysAgo": 7
+  }
+]
