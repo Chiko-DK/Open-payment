@@ -1,4 +1,4 @@
-// app/routes/account.tsx
+
 import Nav from '@/components/navigation';
 import Image from 'next/image';
 
@@ -31,7 +31,7 @@ export default function Account() {
             alt="Profile Picture"
             width={100}
             height={100}
-            className="rounded-full object-cover"
+            className="w-24 h-24 rounded-full object-cover border-2 border-indigo-600"
           />
 
           <div className="flex-1">
