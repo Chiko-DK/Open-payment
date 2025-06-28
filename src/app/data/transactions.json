@@ -1,0 +1,51 @@
+[
+  {
+    "time": "03:26 PM",
+    "details": "Loan repayment from borrower A",
+    "amount": "+R 50.00",
+    "status": "COMPLETED",
+    "pointer": "userA.lown.africa ZAR"
+  },
+  {
+    "time": "02:50 PM",
+    "details": "Lent funds to borrower B",
+    "amount": "-R 100.00",
+    "status": "PENDING",
+    "pointer": "userB.lown.africa ZAR"
+  },
+  {
+    "time": "01:36 PM",
+    "details": "Received interest from borrower A",
+    "amount": "+R 5.00",
+    "status": "COMPLETED",
+    "pointer": "userA.lown.africa ZAR"
+  },
+  {
+    "time": "11:15 AM",
+    "details": "Loan application fee",
+    "amount": "-R 15.00",
+    "status": "COMPLETED",
+    "pointer": "system.lown.africa ZAR"
+  },
+  {
+    "time": "10:00 AM",
+    "details": "Lent funds to borrower C",
+    "amount": "-R 75.00",
+    "status": "PENDING",
+    "pointer": "userC.lown.africa ZAR"
+  },
+  {
+    "time": "09:30 AM",
+    "details": "Withdrawal to bank account",
+    "amount": "-R 200.00",
+    "status": "COMPLETED",
+    "pointer": "bank.account.lown.africa ZAR"
+  },
+  {
+    "time": "04:00 PM",
+    "details": "Initial deposit",
+    "amount": "+R 500.00",
+    "status": "COMPLETED",
+    "pointer": "bank.deposit.lown.africa ZAR"
+  }
+]

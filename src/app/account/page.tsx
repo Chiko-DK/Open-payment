@@ -1,8 +1,11 @@
+"use client";
 
-import Nav from '@/components/navigation';
-import Image from 'next/image';
+import { useState } from "react";
+import Nav from "@/components/navigation";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
-const user = {
+const initialUser = {
   name: 'chiko Kasongo',
   email: 'chiko@lown.africa',
   phone: '+27 71 234 5678',
@@ -15,9 +18,26 @@ const user = {
   activeLoans: 2,
   missedRepayments: 0,
   walletBalance: 'R 325.00',
+  role: 'borrower', // or 'lender'
 };
 
 export default function Account() {
+  const [user, setUser] = useState(initialUser);
+  const router = useRouter();
+
+  const toggleRole = () => {
+    const newRole = user.role === 'lender' ? 'borrower' : 'lender';
+    setUser({ ...user, role: newRole });
+    alert(`Switched to ${newRole.toUpperCase()} mode`);
+
+    // Redirect if on wrong page after switching
+    if (newRole === "borrower" && location.pathname === "/lender") {
+      router.push("/borrower");
+    } else if (newRole === "lender" && location.pathname === "/borrower") {
+      router.push("/lender");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 flex">
       <Nav />
@@ -66,9 +86,19 @@ export default function Account() {
           </div>
         </div>
 
-        <div className="bg-indigo-600 text-white rounded-lg p-6 shadow text-center">
+        <div className="bg-indigo-600 text-white rounded-lg p-6 shadow text-center mb-6">
           <h4 className="text-lg">Wallet Balance</h4>
           <div className="text-3xl font-bold mt-2">{user.walletBalance}</div>
+        </div>
+
+        <div className="text-center">
+          <p className="mb-2 text-sm text-gray-600">Current Role: <span className="font-bold">{user.role.toUpperCase()}</span></p>
+          <button
+            onClick={toggleRole}
+            className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg transition"
+          >
+            Switch to {user.role === 'borrower' ? 'LENDER' : 'BORROWER'} Mode
+          </button>
         </div>
       </main>
     </div>

@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "apr": 6.8,
+    "amount": {
+      "prefix": "Up to",
+      "currency": "R",
+      "value": 50000
+    },
+    "term": "36-60"
+  },
+  {
+    "id": 2,
+    "apr": 8.2,
+    "amount": {
+      "prefix": "Up to",
+      "currency": "R",
+      "value": 35000
+    },
+    "term": "24-48"
+  },
+  {
+    "id": 3,
+    "apr": 9.5,
+    "amount": {
+      "prefix": "Up to",
+      "currency": "R",
+      "value": 25000
+    },
+    "term": "12-36"
+  },
+  {
+    "id": 4,
+    "apr": 7.1,
+    "amount": {
+      "prefix": "Up to",
+      "currency": "R",
+      "value": 40000
+    },
+    "term": "24-60"
+  },
+  {
+    "id": 5,
+    "apr": 10.5,
+    "amount": {
+      "prefix": "Up to",
+      "currency": "R",
+      "value": 10000
+    },
+    "term": "6-24"
+  }
+]

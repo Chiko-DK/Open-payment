@@ -28,5 +28,25 @@
     "creditScoreRequired": 750,
     "applications": 7,
     "postedDaysAgo": 7
+  },
+  {
+    "id": 4,
+    "dotColor": "orange",
+    "loanAmount": 30000,
+    "interestRate": 8.0,
+    "termMonths": 48,
+    "creditScoreRequired": 680,
+    "applications": 5,
+    "postedDaysAgo": 3
+  },
+  {
+    "id": 5,
+    "dotColor": "purple",
+    "loanAmount": 20000,
+    "interestRate": 9.0,
+    "termMonths": 30,
+    "creditScoreRequired": 620,
+    "applications": 2,
+    "postedDaysAgo": 1
   }
 ]

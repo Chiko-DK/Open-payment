@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Nav from "@/components/navigation";
+import loanOffers from "../data/lender.json";
 
 export default function Lender() {
+  
   return (
     <div className="min-h-screen bg-slate-900 text-white">
       <div className="flex">
@@ -96,8 +98,6 @@ export default function Lender() {
                       <option>2 months</option>
                     </select>
                   </div>
-                  
-                 
                 </div>
                 
                 <button className="mt-4 bg-green-500 hover:bg-green-600 text-black font-semibold py-3 px-6 rounded-lg transition-colors">
@@ -105,77 +105,63 @@ export default function Lender() {
                 </button>
               </div>
 
-              {/* Active Loan Offers */}
+              {/* Active Loan Offers from JSON */}
               <div className="bg-slate-800 rounded-xl p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold">Your Active Loan Offers</h2>
-                  <span className="text-sm text-slate-400">5 active offers</span>
+                  <span className="text-sm text-slate-400">{loanOffers.length} active offers</span>
                 </div>
                 
                 <div className="space-y-3">
-                  <div className="bg-slate-700 rounded-lg p-4 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                      <div>
-                        <div className="font-medium">$25,000 at 7.5% APR</div>
-                        <div className="text-sm text-slate-400">36 months • Credit Score 700+</div>
+                  {loanOffers.map((offer) => (
+                    <div
+                      key={offer.id}
+                      className="bg-slate-700 rounded-lg p-4 flex items-center justify-between"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div
+                          className={`w-3 h-3 rounded-full ${
+                            offer.dotColor === "green"
+                              ? "bg-green-500"
+                              : offer.dotColor === "yellow"
+                              ? "bg-yellow-500"
+                              : offer.dotColor === "blue"
+                              ? "bg-blue-500"
+                              : "bg-slate-500"
+                          }`}
+                        ></div>
+                        <div>
+                          <div className="font-medium">
+                            ${offer.loanAmount.toLocaleString()} at {offer.interestRate}% APR
+                          </div>
+                          <div className="text-sm text-slate-400">
+                            {offer.termMonths} months • Credit Score {offer.creditScoreRequired}+
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-sm font-medium">
+                          {offer.applications} Application{offer.applications !== 1 && "s"}
+                        </div>
+                        <div className="text-xs text-slate-400">
+                          Posted {offer.postedDaysAgo} day{offer.postedDaysAgo !== 1 && "s"} ago
+                        </div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-sm font-medium">3 Applications</div>
-                      <div className="text-xs text-slate-400">Posted 2 days ago</div>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-slate-700 rounded-lg p-4 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                      <div>
-                        <div className="font-medium">$15,000 at 9.2% APR</div>
-                        <div className="text-sm text-slate-400">24 months • Credit Score 650+</div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm font-medium">1 Application</div>
-                      <div className="text-xs text-slate-400">Posted 5 days ago</div>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-slate-700 rounded-lg p-4 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                      <div>
-                        <div className="font-medium">$50,000 at 6.8% APR</div>
-                        <div className="text-sm text-slate-400">60 months • Credit Score 750+</div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm font-medium">7 Applications</div>
-                      <div className="text-xs text-slate-400">Posted 1 week ago</div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
 
             {/* Right Sidebar */}
             <div className="space-y-6">
-              
-              {/* Quick Actions */}
               <div className="bg-slate-800 rounded-xl p-6">
                 <h3 className="font-semibold mb-4">Quick Actions</h3>
-                
                 <div className="space-y-3">
-                  <button className="w-full bg-green-500 hover:bg-green-600 text-black font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
-                    <span>➕</span>
-                    <span>New Offer</span>
-                  </button>
-                  
                   <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
                     <span>👥</span>
                     <span>View Applications</span>
                   </button>
-                  
                   <button className="w-full bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
                     <span>📊</span>
                     <span>Portfolio Analysis</span>
@@ -183,10 +169,8 @@ export default function Lender() {
                 </div>
               </div>
 
-              {/* Recent Applications */}
               <div className="bg-slate-800 rounded-xl p-6">
                 <h3 className="font-semibold mb-4">Recent Applications</h3>
-                
                 <div className="space-y-3">
                   <div className="bg-slate-700 rounded-lg p-3">
                     <div className="flex items-center justify-between mb-2">
@@ -196,7 +180,6 @@ export default function Lender() {
                     <div className="text-sm text-slate-400">$15,000 • 7.5% APR</div>
                     <div className="text-xs text-slate-500">Credit Score: 720</div>
                   </div>
-                  
                   <div className="bg-slate-700 rounded-lg p-3">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-medium">Sarah M.</span>
@@ -205,7 +188,6 @@ export default function Lender() {
                     <div className="text-sm text-slate-400">$25,000 • 8.2% APR</div>
                     <div className="text-xs text-slate-500">Credit Score: 685</div>
                   </div>
-                  
                   <div className="bg-slate-700 rounded-lg p-3">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-medium">Mike R.</span>
@@ -217,10 +199,8 @@ export default function Lender() {
                 </div>
               </div>
 
-              {/* Performance Metrics */}
               <div className="bg-slate-800 rounded-xl p-6">
                 <h3 className="font-semibold mb-4">Performance Metrics</h3>
-                
                 <div className="space-y-4">
                   <div>
                     <div className="flex justify-between text-sm mb-1">
@@ -228,31 +208,30 @@ export default function Lender() {
                       <span>78%</span>
                     </div>
                     <div className="w-full bg-slate-700 rounded-full h-2">
-                      <div className="bg-green-500 h-2 rounded-full" style={{width: '78%'}}></div>
+                      <div className="bg-green-500 h-2 rounded-full" style={{ width: "78%" }}></div>
                     </div>
                   </div>
-                  
                   <div>
                     <div className="flex justify-between text-sm mb-1">
                       <span>Default Rate</span>
                       <span>2.1%</span>
                     </div>
                     <div className="w-full bg-slate-700 rounded-full h-2">
-                      <div className="bg-red-500 h-2 rounded-full" style={{width: '2.1%'}}></div>
+                      <div className="bg-red-500 h-2 rounded-full" style={{ width: "2.1%" }}></div>
                     </div>
                   </div>
-                  
                   <div>
                     <div className="flex justify-between text-sm mb-1">
                       <span>Avg ROI</span>
                       <span>12.8%</span>
                     </div>
                     <div className="w-full bg-slate-700 rounded-full h-2">
-                      <div className="bg-blue-500 h-2 rounded-full" style={{width: '65%'}}></div>
+                      <div className="bg-blue-500 h-2 rounded-full" style={{ width: "65%" }}></div>
                     </div>
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
         </main>

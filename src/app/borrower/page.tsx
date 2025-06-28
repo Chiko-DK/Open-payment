@@ -1,7 +1,36 @@
 // src/app/Borrower/page.tsx
+"use client";
+
 import Nav from "@/components/navigation";
+import loanOffers from "../data/borrower.json";
 
 export default function Borrower() {
+  const applyForLoan = async (offer: any) => {
+  const contract = {
+    name: "Current User", // Ideally fetched from session or user state
+    pointer: "user.lown.africa",
+    amount: `R ${offer.amount.value.toLocaleString()}`,
+    status: "PENDING",
+  };
+
+  try {
+    const res = await fetch('/api/contracts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(contract),
+    });
+
+    if (res.ok) {
+      alert('Loan application submitted!');
+    } else {
+      alert('Failed to submit loan.');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Error occurred while applying.');
+  }
+};
+
   return (
     <div className="min-h-screen bg-slate-900 text-white flex">
       {/* Sidebar Navigation */}
@@ -108,85 +137,43 @@ export default function Borrower() {
             <div className="bg-slate-800 rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold">Available Loan Offers</h2>
-                <span className="text-sm text-slate-400">12 offers match your profile</span>
+                <span className="text-sm text-slate-400">{loanOffers.length} offers match your profile</span>
               </div>
 
               <div className="space-y-4">
-                <div className="bg-slate-700 rounded-lg p-4 border border-green-500/30">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">BEST MATCH</span>
-                      <span className="text-lg font-semibold">6.8% APR</span>
-                    </div>
-                    <button className="bg-green-500 hover:bg-green-600 text-black px-4 py-2 rounded-lg font-medium transition-colors">
+                {loanOffers.map((offer, index) => (
+                  <div key={offer.id} className={`bg-slate-700 rounded-lg p-4 ${index === 0 ? 'border border-green-500/30' : ''}`}>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        {index === 0 && (
+                          <span className="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">BEST MATCH</span>
+                        )}
+                        <span className="text-lg font-semibold">{offer.apr}% APR</span>
+                      </div>
+                      <button
+                      onClick={() => applyForLoan(offer)}
+                      className={`${
+                        index === 0
+                          ? 'bg-green-500 hover:bg-green-600 text-black'
+                          : 'bg-blue-500 hover:bg-blue-600 text-white'
+                      } px-4 py-2 rounded-lg font-medium transition-colors`}
+                    >
                       Apply Now
                     </button>
-                  </div>
-                  <div className="grid grid-cols-3 gap-4 text-sm">
-                    <div>
-                      <div className="text-slate-400">Amount</div>
-                      <div className="font-medium">Up to R50,000</div>
                     </div>
-                    <div>
-                      <div className="text-slate-400">Term</div>
-                      <div className="font-medium">36-60 months</div>
-                    </div>
-                    <div>
-                      <div className="text-slate-400">Credit Required</div>
-                      <div className="font-medium">700+</div>
+                    <div className="grid grid-cols-3 gap-4 text-sm">
+                      <div>
+                        <div className="text-slate-400">Amount</div>
+                        <div className="font-medium">{offer.amount.prefix} {offer.amount.currency}{offer.amount.value.toLocaleString()}</div>
+                      </div>
+                      <div>
+                        <div className="text-slate-400">Term</div>
+                        <div className="font-medium">{offer.term} months</div>
+                      </div>
+                      
                     </div>
                   </div>
-                </div>
-
-                <div className="bg-slate-700 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg font-semibold">8.2% APR</span>
-                    </div>
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                      Apply Now
-                    </button>
-                  </div>
-                  <div className="grid grid-cols-3 gap-4 text-sm">
-                    <div>
-                      <div className="text-slate-400">Amount</div>
-                      <div className="font-medium">Up to R35,000</div>
-                    </div>
-                    <div>
-                      <div className="text-slate-400">Term</div>
-                      <div className="font-medium">24-48 months</div>
-                    </div>
-                    <div>
-                      <div className="text-slate-400">Credit Required</div>
-                      <div className="font-medium">650+</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-slate-700 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg font-semibold">9.5% APR</span>
-                    </div>
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                      Apply Now
-                    </button>
-                  </div>
-                  <div className="grid grid-cols-3 gap-4 text-sm">
-                    <div>
-                      <div className="text-slate-400">Amount</div>
-                      <div className="font-medium">Up to R25,000</div>
-                    </div>
-                    <div>
-                      <div className="text-slate-400">Term</div>
-                      <div className="font-medium">12-36 months</div>
-                    </div>
-                    <div>
-                      <div className="text-slate-400">Credit Required</div>
-                      <div className="font-medium">600+</div>
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
