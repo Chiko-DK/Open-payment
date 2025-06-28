@@ -12,7 +12,7 @@ export default function Nav() {
         <Link href="/borrower" className="block hover:text-indigo-300">📥 Borrower</Link>
         <Link href="/transactions" className="block hover:text-indigo-300">📄 Transactions</Link>
         <Link href="/contracts" className="block hover:text-indigo-300">🔑 Contracts</Link>
-        <Link href="/account" className="block hover:text-indigo-300">⚙️ Accounts</Link>
+        <Link href="/account" className="block hover:text-indigo-300">⚙️ Account</Link>
       </nav>
     </aside>
   );
