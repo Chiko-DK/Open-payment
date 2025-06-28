@@ -1,46 +1,12 @@
 import Image from "next/image";
-
+import Link from "next/link";
+import Nav from "@/components/navigation";
 export default function Home() {
   return (
     <div className="min-h-screen bg-slate-900 text-white">
       <div className="flex">
         {/* Sidebar */}
-        <aside className="w-64 bg-slate-800 min-h-screen p-4">
-          <div className="flex items-center gap-2 mb-8">
-            <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-              <span className="text-xs font-bold">L</span>
-            </div>
-            <span className="font-semibold text-lg">LowN</span>
-          </div>
-          
-          <nav className="space-y-2">
-            <a href="#" className="flex items-center gap-3 p-3 rounded-lg bg-slate-700 text-white">
-              <span className="text-lg">🏠</span>
-              <span>Home</span>
-            </a>
-            <a href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition-colors">
-              <span className="text-lg">✈️</span>
-              <span>Lender</span>
-            </a>
-            <a href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition-colors">
-              <span className="text-lg">📥</span>
-              <span>Borrower</span>
-            </a>
-            <a href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition-colors">
-              <span className="text-lg">📄</span>
-              <span>Transactions</span>
-            </a>
-            <a href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition-colors">
-              <span className="text-lg">🔑</span>
-              <span>Contracts</span>
-            </a>
-            <a href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition-colors">
-              <span className="text-lg">⚙️</span>
-              <span>Account</span>
-            </a>
-          </nav>
-        </aside>
-
+        <Nav />
         {/* Main Content */}
         <main className="flex-1 p-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
